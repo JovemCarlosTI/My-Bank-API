@@ -1,4 +1,4 @@
-###
+### Criar account
 POST http://localhost:3000/account
 Content-Type: application/json
 
@@ -7,30 +7,30 @@ Content-Type: application/json
     "balance": 20009999900
 }
 
-###
+### GET de todas accounts
 GET http://localhost:3000/account
 
-###
-GET http://localhost:3000/account/2
+### GET de uma account por id
+GET http://localhost:3000/account/3
 
-###
-DELETE http://localhost:3000/account/1
+### DELETE de uma account por id
+DELETE http://localhost:3000/account/2
 
-###
+### Atualização PUT de uma account por id
 PUT http://localhost:3000/account
 Content-Type: application/json
 
 {
       "id": 3,
       "name": "Carlos André",
-      "balance": 299999
+      "balance": 3
 }
 
-###
+### Atualização PATCH de balance da account por id
 PATCH http://localhost:3000/account/updateBalance
 Content-Type: application/json
 
 {
       "id": 3,
-      "balance": 2
+      "balance": 22222
 }
