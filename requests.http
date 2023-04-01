@@ -1,0 +1,36 @@
+###
+POST http://localhost:3000/account
+Content-Type: application/json
+
+{
+    "name": "Calopsita",
+    "balance": 20009999900
+}
+
+###
+GET http://localhost:3000/account
+
+###
+GET http://localhost:3000/account/2
+
+###
+DELETE http://localhost:3000/account/1
+
+###
+PUT http://localhost:3000/account
+Content-Type: application/json
+
+{
+      "id": 3,
+      "name": "Carlos André",
+      "balance": 299999
+}
+
+###
+PATCH http://localhost:3000/account/updateBalance
+Content-Type: application/json
+
+{
+      "id": 3,
+      "balance": 2
+}
