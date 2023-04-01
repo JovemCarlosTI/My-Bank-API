@@ -17,6 +17,64 @@ async function createAccount(account) {
     return account;
 }
 
+async function getAccounts() {
+    const data = JSON.parse(await readFile(global.fileName));
+    delete data.nextId;
+
+    return data;
+}
+
+async function getAccount(id) {
+    const data = JSON.parse(await readFile(global.fileName));
+
+    const account = data.accounts.find(account => account.id === id)
+
+    return account;
+}
+
+async function deleteAccount(id) {
+    const data = JSON.parse(await readFile(global.fileName));
+    data.accounts = data.accounts.filter(account => account.id !== id);
+
+    await writeFile(global.fileName, JSON.stringify(data, null, 2));
+}
+
+async function updateAccount(account) {
+    const data = JSON.parse(await readFile(global.fileName));
+    const indexAccount = data.accounts.findIndex(a => a.id === account.id);
+
+    if (indexAccount === -1) {
+        throw new Error(`Account com id ${account.id} inexistente`)
+    }
+
+    data.accounts[indexAccount].name = account.name;
+    data.accounts[indexAccount].balance = account.balance;
+
+    await writeFile(global.fileName, JSON.stringify(data, null, 2));
+
+    return data.accounts[indexAccount];
+}
+
+async function updateBalance(account) {
+    const data = JSON.parse(await readFile(global.fileName));
+    const indexAccount = data.accounts.findIndex(a => a.id === account.id);
+
+    if (indexAccount === -1) {
+        throw new Error(`Account com id ${account.id} inexistente`)
+    }
+
+    data.accounts[indexAccount].balance = account.balance;
+
+    await writeFile(global.fileName, JSON.stringify(data, null, 2));
+
+    return data.accounts[indexAccount];
+}
+
 export default {
-    createAccount
+    createAccount,
+    getAccounts,
+    getAccount,
+    deleteAccount,
+    updateAccount,
+    updateBalance
 }
