@@ -4,6 +4,10 @@ import winston from 'winston';
 import {promises as fs} from 'fs';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
+import { buildSchema } from 'graphql';
+import { graphqlHTTP } from 'express-graphql';
+import accountService from './services/account.service.js';
+import Schema from './schema/index.js';
 
 // Routers
 import accountsRouter from "./routes/account.routes.js";
@@ -35,6 +39,44 @@ global.logger = winston.createLogger({
     )
 });
 
+// const schema = buildSchema(`
+//     type Account {
+//         id: Int
+//         name: String
+//         balance: Float
+//     }
+//     input AccountInput {
+//         id: Int
+//         name: String
+//         balance: Float 
+//     }
+//     type Query {
+//         getAccounts: [Account]
+//         getAccount(id: Int): Account
+//     }
+//     type Mutation {
+//         createAccount(account: AccountInput): Account
+//         deleteAccount(id: Int): Boolean
+//         updateAccount(account: AccountInput): Account
+//     }
+// `)
+
+const root = {
+    getAccounts: () => accountService.getAccounts(),
+    getAccount({id}) {
+        return accountService.getAccount(id);
+    },
+    createAccount({account}) {
+        return accountService.createAccount(account);
+    },
+    deleteAccount({id}) {
+        accountService.deleteAccount(id);
+    },
+    updateAccount({account}) {
+        return accountService.updateAccount(account);
+    }
+}
+
 app.use(express.json());
 
 // Libera acesso de outros domínios
@@ -47,6 +89,12 @@ app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 // Redireciona router de Account
 app.use('/account', accountsRouter);
+
+app.use('/graphql', graphqlHTTP({
+    schema: Schema,
+    rootValue: root,
+    graphiql: true
+}));
 
 app.listen(PORT, async () => {
 

@@ -45,8 +45,8 @@ async function updateAccount(account) {
         throw new Error(`Account com id ${account.id} inexistente`)
     }
 
-    data.accounts[indexAccount].name = account.name;
-    data.accounts[indexAccount].balance = account.balance;
+    if (account.name) data.accounts[indexAccount].name = account.name;
+    if (account.balance) data.accounts[indexAccount].balance = account.balance;
 
     await writeFile(global.fileName, JSON.stringify(data, null, 2));
 
